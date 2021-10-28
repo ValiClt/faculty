@@ -1,0 +1,234 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+#include <stdio.h>
+#define MAXN 100
+//#define FINPUT "INPUT.DAT"
+#define M 100
+unsigned long int N;
+
+unsigned long int *parinte=NULL;
+unsigned int *chei=NULL;
+/*struct key 
+{
+	int cheie;
+	char nume[20];
+	char prenume[10];
+};*/
+
+int A[MAXN];
+//int *chei;
+//struct key chei[MAXN];
+unsigned int contor;
+
+//functia insereaza un nod cu cheieN ca fiu la nodul cu cheieT
+//functia retureneaza < 0 in caz de eroare
+int insereaza(int cheieN, int cheieT)
+{
+	int i;
+	for (i = 0; i < MAXN; i++)
+	{
+		if (chei[i] == cheieT) // i index pt T
+			break;
+	}
+	if (chei[i] != cheieT)
+	{
+		printf("Insereaza(): Nu am gasit cheia pentru T nodul tata\n");
+		return -1;
+	}
+	if (contor == MAXN)
+	{
+		printf("insereaza(): Arborele A este plin. contor == MAXN!\n");
+		return -1;
+	}
+	A[contor] = i; // i este indexul pentru T 
+	chei[contor] = cheieN;
+	contor++;
+	return 0; // totul e ok
+}
+//functia returneaza parintele nodului N din arborele A 
+int tata(int cheieN)
+{
+	int i;
+	for (i = 0; i < contor; i++)
+	{
+		if (chei[i] == cheieN)
+			break;
+	}
+	if (chei[i] != cheieN)
+	{
+		printf("tata(): Nu am gasit nodul N in arborele A");
+		return -1;
+	}
+	return chei[A[i]]; //returneaza cheia parintelui pt nodul N
+}
+
+int suprima(int cheieN) //functia suprima nodul cu cheieN su=i toti descendentii sai
+{
+	int i,j;
+	for (i = 0; i < contor;i++)
+	{
+		if (chei[i] == cheieN) break;
+	}
+	if (chei[i] != cheieN)
+	{
+		printf("Suprima(): nu exista cheia pe care doriti sa o stergeti!\n");
+		return -1;
+	}
+	chei[i] = 0;
+	A[i] = 0; //radacina are si ea parinte pe 0,dar e mereu pe pozitia i=0
+	for (j = 0; j < contor; j++)
+	{
+		if (A[j] == i) suprima(chei[j]);
+	}
+}
+//functia returneaza primul fiu al nodului cu cheia cheieN din A
+int primulfiu(int cheieN)
+{
+	int i,j;
+	for (i = 0; i < contor; i++)
+	{
+		if (chei[i] == cheieN)
+			break;
+	}
+	if (chei[i] != cheieN)
+	{
+		printf("primul fiu(): Nu am gasit nodul cu cheia cheieN\n");
+		return -1;
+	}
+	for (j = 0; j < contor; j++)
+	{
+		if (A[j] == i)
+			break;
+	}
+	if (A[j] != i)
+	{
+		printf("primulfiu(): Nodul cu cheia cheieN nu are fii.\n");
+		return -1;
+	}
+	return chei[j]; //cheia primului fiu al nodului cu cheia cheieN
+}
+void initializeaza(void)
+{
+	int i;
+	for (i = 0; i < contor; i++)
+	{
+		chei[i] = 0;
+		A[i] = 0;
+	}
+	contor = 0;
+	return;
+}
+/*int cauta(unsigned int num) {
+	int i;
+	for (i = 0; i < N; i++) {
+		if (tab[i] == num) return 1; // true, gasit
+	}
+	return 0; // false, numar negasit
+}*/
+int main (void) {
+	FILE *fin;
+	unsigned long int contor=0, index=0;
+
+	fin = fopen("INPUT.DAT", "rb");
+	if (fin == NULL) {
+		perror("fopen()");
+		return -1;
+	}
+	
+	fseek(fin, 0 , SEEK_END); // pozitionare la sfarsit de fisier
+	N = ftell(fin);  // returneaza numarul de octeti din fisier
+
+	N = N / sizeof(unsigned int);
+	fseek(fin, 0, SEEK_SET); // inceputul fisierului, pozitionare
+
+	fprintf(stdout, "Marimea fisierului %s este %lu octeti.\n", "INPUT.DAT", N*sizeof(unsigned int));
+	fprintf(stdout, "N = %lu\n", N);
+
+	parinte = (unsigned long int *) malloc(sizeof(unsigned long int) * N);
+	if (parinte == NULL) {
+		perror("malloc()");
+		return -1;
+	}
+
+	chei = (unsigned int *) malloc(sizeof(unsigned int) * N);
+	if (chei == NULL) {
+		perror("malloc2()");
+		return -1;
+	}
+
+	contor = 1;
+	contor--;
+	for (index = 0; index < N; index++) {
+		parinte[index] = 0;
+		chei[index] = 0;
+	}
+
+	fprintf(stdout, "OK am initializat arborele..\n"); 
+int opt,che;
+		
+	
+		
+	while(1)
+	{
+			printf("\n");
+		
+		printf("1. Introducere nod\n");
+		printf("2. Afisare arbore inordine\n");
+		printf("3. Afisare arbore preordine\n");
+		printf("4. Stergerea intregului arbore\n");
+		printf("5. Cautare dupa cheie\n");
+		printf("6. Afisarea celei mai mici chei\n");
+		printf("7. Afisarea nodurilor cu chei intre k1 si k2\n");
+		printf("8. Afisare pe nivele\n");
+		printf("9. Iesire\n");
+		printf("\nDati optiunea: ");
+		
+			
+		
+		scanf("%d",&opt);
+		printf("\n");
+		
+		
+		switch(opt)
+		{
+			/*case 1:
+				   printf("Introduceti cheia:");
+				   scanf("%d",&che);
+				   rad=insereaza_cheie(rad,che);
+			       break;*/
+			case 2:
+				   inordine(rad);
+			       break;
+			case 3:
+  	               preordine(rad);
+                   break;
+			case 4:
+				   stergere_tot();
+			       break;
+			case 5:
+				   printf("Introduceti cheia:");
+                   scanf("%d",&che);
+				   printf("%d",cauta(rad,che));
+			       break;
+			case 6:
+				   printf("%d\n",cel_mai_mic(rad));
+			       break;
+			case 7:
+			       printf("%d",intre(rad,1,5));
+			       break;
+			case 8:
+				   afisare_nivele(rad,1);
+			       break;
+			case 9:
+                   return 0;
+			       break;
+		}
+	}
+	getch();
+	return 0;
+}
+/*int main(void)
+{
+
+}*/
